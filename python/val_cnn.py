@@ -12,12 +12,13 @@ from torchvision import transforms
 import torch
 from torch.autograd import Variable
 from dataset import TrainDataset
-from cnnmodel import CNN, CNN2, CNN3
+#from cnnmodel import CNN, CNN2, CNN3
+from model import CNN1, CNN2, CNN3, CNN4
 import sys
 
 def validate(model_name):
     BATCH_SIZE = 100
-    models = {'CNN':CNN(), 'CNN2':CNN2(), 'CNN3':CNN3()}
+    models = {'CNN1':CNN1(), 'CNN2':CNN2(), 'CNN3':CNN3(), 'CNN4':CNN4()}
     # load model and dataset
 
     IMG_EXT = ".JPEG"
@@ -39,8 +40,7 @@ def validate(model_name):
     
     transformations = transforms.Compose([
                 transforms.ToTensor(),
-                normalize,
-            ])
+                normalize])
     kwargs = {'num_workers':1, 'pin_memory':True} if is_cuda else {}
 
     val_dataset = TrainDataset(VAL_DATA, VAL_IMG_PATH, IMG_EXT, transformations)

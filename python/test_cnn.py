@@ -8,7 +8,8 @@ Created on Thu Jun  1 18:27:34 2017
 
 import torch
 from dataset import TestDataset
-from cnnmodel import CNN, CNN2, CNN3
+#from cnnmodel import CNN, CNN2, CNN3
+from model import CNN1, CNN2, CNN3, CNN4
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torch.autograd import Variable
@@ -23,15 +24,14 @@ def test(model_name):
     MODEL_PATH = "../model/"+model_name+"_model.pkl"
     OUTPUT_PATH = "../result/"+model_name+"_result.csv"
 
-    models = {'CNN':CNN(), 'CNN2':CNN2(), 'CNN3':CNN3()}
+    models = {'CNN1':CNN1(), 'CNN2':CNN2(), 'CNN3':CNN3(), 'CNN4':CNN4()}
     is_cuda = torch.cuda.is_available()
     
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
     transformations = transforms.Compose([
                 transforms.ToTensor(),
-                normalize,
-            ])
+                normalize])
     
     kwargs = {'num_workers':1, 'pin_memory':True} if is_cuda else {}
     test_dataset = TestDataset(TEST_DATA, TEST_IMG_PATH, IMG_EXT, transformations)
