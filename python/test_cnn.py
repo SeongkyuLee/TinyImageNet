@@ -21,7 +21,7 @@ def test(model_name):
     TEST_IMG_PATH = "../data/test/images/"
     TEST_DATA = "../data/test/test_sample_submission_kaggle.csv"
     MODEL_PATH = "../model/"+model_name+"_model.pkl"
-    OUTPUT_PATH = "../data/test/result.csv"
+    OUTPUT_PATH = "../result/"+model_name+"_result.csv"
 
     models = {'CNN':CNN(), 'CNN2':CNN2(), 'CNN3':CNN3()}
     is_cuda = torch.cuda.is_available()

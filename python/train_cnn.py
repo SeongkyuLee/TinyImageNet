@@ -17,7 +17,7 @@ import sys
 def train(model_name, is_train):
     BATCH_SIZE = 100
     LR = 0.001
-    NUM_EPOCHS = 1
+    NUM_EPOCHS = 5
 
     models = {'CNN':CNN(), 'CNN2':CNN2(), 'CNN3':CNN3()}
     
