@@ -11,7 +11,8 @@ from torchvision import transforms
 import torch
 from torch.autograd import Variable
 from dataset import TrainDataset
-from cnnmodel import CNN,CNN2,CNN3
+#from cnnmodel import CNN,CNN2,CNN3
+from model import CNN1, CNN2, CNN3, CNN4
 import sys
 
 def train(model_name, is_train):
@@ -19,7 +20,7 @@ def train(model_name, is_train):
     LR = 0.001
     NUM_EPOCHS = 1
 
-    models = {'CNN':CNN(), 'CNN2':CNN2(), 'CNN3':CNN3()}
+    models = {'CNN1':CNN1(), 'CNN2':CNN2(), 'CNN3':CNN3(), 'CNN4':CNN4()}
     
     # load model and dataset
     IMG_EXT = ".JPEG"
@@ -46,8 +47,7 @@ def train(model_name, is_train):
     transformations = transforms.Compose([
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
-                normalize
-            ])
+                normalize])
     
     kwargs = {'num_workers':1, 'pin_memory':True} if is_cuda else {}
     train_dataset = TrainDataset(TRAIN_DATA, TRAIN_IMG_PATH, IMG_EXT, transformations)
