@@ -10,19 +10,45 @@ import math
 
 class CNN(nn.Module):
 
-    def __init__(self, cnn_layers):
+    def __init__(self, model_number, cnn_layers):
         super(CNN, self).__init__()
+        model_number = int(model_number)
         self.cnn_layers = cnn_layers
-        self.fc_layers = nn.Sequential(
-            #nn.Linear(128 * 3 * 3, 1024),
-            nn.Linear(128 * 7 * 7, 1024),
-            nn.ReLU(True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
-            nn.ReLU(True),
-            nn.Dropout(),
-            nn.Linear(1024, 100),
-        )
+        
+        if 1 <= model_number < 5:
+            self.fc_layers = nn.Sequential(
+                nn.Linear(128 * 3 * 3, 1024),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(1024, 1024),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(1024, 100),
+            )
+
+            
+        elif 5 <= model_number < 10:
+            self.fc_layers = nn.Sequential(
+                nn.Linear(128 * 7 * 7, 1024),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(1024, 1024),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(1024, 100),
+            )
+       
+        elif 10 <= model_number:
+            self.fc_layers = nn.Sequential(
+                nn.Linear(128 * 7 * 7, 4096),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(4096, 4096),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(4096, 100),
+            )            
+           
         self._initialize_weights()
 
     def forward(self, x):
@@ -71,15 +97,19 @@ cfg = {
     '2': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],
     '3': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],
     '4': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 64, 'M', 128, 128, 128, 128, 'M'],
-    # nn.Linear(128 * 7 * 7, 1024)
+    # nn.Linear(128 * 7 * 7, 1024) for 5~9
     '5': [16, 'M', 32, 'M', 64, 64, 'M', 128, 128],
     '6': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128],
     '7': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 'M', 128, 128, 128],
-    '8': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 64, 'M', 128, 128, 128, 128]
+    '8': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 64, 'M', 128, 128, 128, 128],
+    '9': [16, 16, 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],  
+    ## nn.Linear(128 * 7 * 7, 4098) for 10 ~
+    '10': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128],
+    '11': [16, 16, 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],
 }
 
-def make_CNN(number):
-    cnn_layers = make_convolutional_layers(cfg[number],True)
-    model = CNN(cnn_layers)
+def make_CNN(model_number):
+    cnn_layers = make_convolutional_layers(cfg[model_number],True)
+    model = CNN(model_number, cnn_layers)
     return model
 
