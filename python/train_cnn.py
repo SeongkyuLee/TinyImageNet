@@ -17,7 +17,7 @@ import sys
 def train(model_number, is_train):
     BATCH_SIZE = 100
     LR = 0.001
-    NUM_EPOCHS = 5
+    NUM_EPOCHS = 10
     
     # load model and dataset
     IMG_EXT = ".JPEG"
@@ -81,7 +81,6 @@ def train(model_number, is_train):
             losses.append(loss.data[0])
             loss.backward()
             optimizer.step()
-                
             if (i+1) % 10 == 0:
                 print ('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f' 
                        %(epoch+1, NUM_EPOCHS, i+1, len(train_dataset)//BATCH_SIZE, loss.data[0]))

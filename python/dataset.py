@@ -10,6 +10,8 @@ import os
 from PIL import Image
 import torch
 from torch.utils.data.dataset import Dataset
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 
 class TrainDataset(Dataset):
