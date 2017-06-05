@@ -20,8 +20,8 @@ def test(model_number):
     IMG_EXT = ".JPEG"
     TEST_IMG_PATH = "../data/test/images/"
     TEST_DATA = "../data/test/test_sample_submission_kaggle.csv"
-    MODEL_PATH = "../model/"+model_number+"_model.pkl"
-    OUTPUT_PATH = "../result/"+model_number+"_result.csv"
+    MODEL_PATH = "../model/CNN"+model_number+"_model.pkl"
+    OUTPUT_PATH = "../result/CNN"+model_number+"_result.csv"
     
     is_cuda = torch.cuda.is_available()
     
