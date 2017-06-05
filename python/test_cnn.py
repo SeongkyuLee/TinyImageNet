@@ -8,23 +8,21 @@ Created on Thu Jun  1 18:27:34 2017
 
 import torch
 from dataset import TestDataset
-#from cnnmodel import CNN, CNN2, CNN3
-from model import CNN1, CNN2, CNN3, CNN4
+from model import make_CNN
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torch.autograd import Variable
 import pandas as pd
 import sys
 
-def test(model_name):
+def test(model_number):
     BATCH_SIZE = 100
     IMG_EXT = ".JPEG"
     TEST_IMG_PATH = "../data/test/images/"
     TEST_DATA = "../data/test/test_sample_submission_kaggle.csv"
-    MODEL_PATH = "../model/"+model_name+"_model.pkl"
-    OUTPUT_PATH = "../result/"+model_name+"_result.csv"
-
-    models = {'CNN1':CNN1(), 'CNN2':CNN2(), 'CNN3':CNN3(), 'CNN4':CNN4()}
+    MODEL_PATH = "../model/"+model_number+"_model.pkl"
+    OUTPUT_PATH = "../result/"+model_number+"_result.csv"
+    
     is_cuda = torch.cuda.is_available()
     
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -41,7 +39,7 @@ def test(model_name):
                              shuffle=False,
                              **kwargs)
     
-    model = models[model_name]
+    model = make_CNN(model_number)
     model.load_state_dict(torch.load(MODEL_PATH))
     
     if is_cuda:
