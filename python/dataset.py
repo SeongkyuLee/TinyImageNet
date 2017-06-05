@@ -10,6 +10,7 @@ import os
 from PIL import Image
 import torch
 from torch.utils.data.dataset import Dataset
+from matplotlib import pyplot as plt
 
 class TrainDataset(Dataset):
     def __init__(self, csv_path, img_path, img_ext, transform=None):  
@@ -61,4 +62,12 @@ class TestDataset(Dataset):
 
     def __len__(self):
         return len(self.X_train.index)
+    
+def save_fig(y, path, title):    
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+    ax.set(title='Example') 
+     
+    ax.plot(y)
+    plt.savefig(path)
     

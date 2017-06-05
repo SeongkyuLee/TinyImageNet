@@ -11,23 +11,24 @@ from torchvision import transforms
 
 import torch
 from torch.autograd import Variable
-from dataset import TrainDataset
-#from cnnmodel import CNN, CNN2, CNN3
-from model import CNN1, CNN2, CNN3, CNN4
+from dataset import TrainDataset, save_fig
+from model import make_CNN
 import sys
 
-def validate(model_name):
+def validate(model_number):
     BATCH_SIZE = 100
-    models = {'CNN1':CNN1(), 'CNN2':CNN2(), 'CNN3':CNN3(), 'CNN4':CNN4()}
+    
     # load model and dataset
 
     IMG_EXT = ".JPEG"
     VAL_IMG_PATH = "../data/train/images/"
     VAL_DATA = "../data/train/validation.csv"
-    MODEL_PATH = "../model/"+model_name+"_model.pkl"
-    
+    MODEL_PATH = "../model/CNN"+model_number+"_model.pkl"
+    ACC_FIG_PATH = "../figure/CNN" + model_number + "_accuracy.jpg"
+    ACC_FIG_TITLE = "CNN" + model_number + " accuracy"
+
+    model = make_CNN(model_number)        
     print('Validate model with 10,000 images.')
-    model = models[model_name]
     model.load_state_dict(torch.load(MODEL_PATH))
     
     # check whether use cuda or not
@@ -51,6 +52,7 @@ def validate(model_name):
     
     # validate the Model
     print('Validation start')
+    accuracies = []
     model.eval()  # Change model to 'eval' mode (BN uses moving mean/var).
     correct = 0
     total = 0
@@ -64,12 +66,14 @@ def validate(model_name):
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum()
+        accuracies.append(100 * correct / float(total))
     
         if (i+1) % 10 == 0:
             print ('Iter [%d/%d] Accuracy: %.4f' 
                    %(i+1, len(val_dataset)//BATCH_SIZE, 100 * correct / total))
         
     print('Test Accuracy of the model on the %d test images: %d %%' % (len(val_dataset), 100 * correct / total))
-
+    save_fig(accuracies, ACC_FIG_PATH, ACC_FIG_TITLE)
+    
 if __name__ == '__main__':
     validate(sys.argv[1])

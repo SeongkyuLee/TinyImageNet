@@ -10,24 +10,23 @@ from torchvision import transforms
 
 import torch
 from torch.autograd import Variable
-from dataset import TrainDataset
-#from cnnmodel import CNN,CNN2,CNN3
-from model import CNN1, CNN2, CNN3, CNN4
+from dataset import TrainDataset, save_fig
+from model import make_CNN
 import sys
 
-def train(model_name, is_train):
+def train(model_number, is_train):
     BATCH_SIZE = 100
     LR = 0.001
     NUM_EPOCHS = 1
-
-    models = {'CNN1':CNN1(), 'CNN2':CNN2(), 'CNN3':CNN3(), 'CNN4':CNN4()}
     
     # load model and dataset
     IMG_EXT = ".JPEG"
     TRAIN_IMG_PATH = "../data/train/images/"
-    MODEL_PATH = "../model/"+model_name+"_model.pkl"
-    model = models[model_name]    
-
+    MODEL_PATH = "../model/CNN" + model_number + "_model.pkl"
+    LOSS_FIG_PATH = "../figure/CNN" + model_number + "_loss.jpg"
+    LOSS_FIG_TITLE = "CNN" + model_number + " loss"
+ 
+    model = make_CNN(model_number)
     if int(is_train):
         print('Train model only with 40,000 images.')
         TRAIN_DATA = "../data/train/train.csv"        
@@ -63,6 +62,7 @@ def train(model_name, is_train):
     # Train the Model    
     print('Start training')
     model.train()
+    losses = []
     for epoch in range(NUM_EPOCHS):
         for i, (images, labels) in enumerate(train_loader):
             if is_cuda:
@@ -78,15 +78,18 @@ def train(model_name, is_train):
             
             labels = labels.view(-1)
             loss = criterion(outputs, labels)
+            losses.append(loss.data[0])
             loss.backward()
             optimizer.step()
-            
+                
             if (i+1) % 10 == 0:
                 print ('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f' 
                        %(epoch+1, NUM_EPOCHS, i+1, len(train_dataset)//BATCH_SIZE, loss.data[0]))
 
         print('Save current model')
         torch.save(model.state_dict(), MODEL_PATH)
-
+        
+    save_fig(losses, LOSS_FIG_PATH, LOSS_FIG_TITLE )
+    
 if __name__ == '__main__':
     train(sys.argv[1], sys.argv[2])

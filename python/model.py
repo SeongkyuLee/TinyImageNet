@@ -14,7 +14,8 @@ class CNN(nn.Module):
         super(CNN, self).__init__()
         self.cnn_layers = cnn_layers
         self.fc_layers = nn.Sequential(
-            nn.Linear(128 * 3 * 3, 1024),
+            #nn.Linear(128 * 3 * 3, 1024),
+            nn.Linear(128 * 7 * 7, 1024),
             nn.ReLU(True),
             nn.Dropout(),
             nn.Linear(1024, 1024),
@@ -45,7 +46,7 @@ class CNN(nn.Module):
                 m.weight.data.normal_(0, 0.01)
                 m.bias.data.zero_()
                 
-def make_cnn_layers(cfg, batch_norm=False):
+def make_convolutional_layers(cfg, batch_norm=False):
     layers = []
     in_channels = 3
     for v in cfg:
@@ -65,28 +66,20 @@ cfg = {
     'B': [64, 64, 'M', 128, 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
     'D': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
     'E': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
+    # nn.Linear(128 * 3 * 3, 1024) for 1~4
     '1': [16, 'M', 32, 'M', 64, 64, 'M', 128, 128, 'M'],
     '2': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],
     '3': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],
-    '4': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 64, 'M', 128, 128, 128, 128, 'M']
+    '4': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 64, 'M', 128, 128, 128, 128, 'M'],
+    # nn.Linear(128 * 7 * 7, 1024)
+    '5': [16, 'M', 32, 'M', 64, 64, 'M', 128, 128],
+    '6': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128],
+    '7': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 'M', 128, 128, 128],
+    '8': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 64, 'M', 128, 128, 128, 128]
 }
 
-def CNN1():
-    cnn_layers = make_cnn_layers(cfg['1'],True)
+def make_CNN(number):
+    cnn_layers = make_convolutional_layers(cfg[number],True)
     model = CNN(cnn_layers)
     return model
 
-def CNN2():
-    cnn_layers = make_cnn_layers(cfg['2'],True)
-    model = CNN(cnn_layers)
-    return model
-
-def CNN3():
-    cnn_layers = make_cnn_layers(cfg['3'],True)
-    model = CNN(cnn_layers)
-    return model
-
-def CNN4():
-    cnn_layers = make_cnn_layers(cfg['4'],True)
-    model = CNN(cnn_layers)
-    return model
