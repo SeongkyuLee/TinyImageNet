@@ -17,7 +17,7 @@ import sys
 def train(model_number, is_train):
     BATCH_SIZE = 100
     LR = 0.001
-    NUM_EPOCHS = 10
+    NUM_EPOCHS = 20
     
     # load model and dataset
     IMG_EXT = ".JPEG"
@@ -85,9 +85,8 @@ def train(model_number, is_train):
                 print ('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f' 
                        %(epoch+1, NUM_EPOCHS, i+1, len(train_dataset)//BATCH_SIZE, loss.data[0]))
 
-        print('Save current model')
-        torch.save(model.state_dict(), MODEL_PATH)
-        
+    print('Save model')
+    torch.save(model.state_dict(), MODEL_PATH)    
     save_fig(losses, LOSS_FIG_PATH, LOSS_FIG_TITLE )
     
 if __name__ == '__main__':

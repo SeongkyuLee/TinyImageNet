@@ -15,7 +15,7 @@ class CNN(nn.Module):
         model_number = int(model_number)
         self.cnn_layers = cnn_layers
         
-        if 1 <= model_number < 5:
+        if  model_number < 5:
             self.fc_layers = nn.Sequential(
                 nn.Linear(128 * 3 * 3, 1024),
                 nn.ReLU(True),
@@ -38,7 +38,7 @@ class CNN(nn.Module):
                 nn.Linear(1024, 100),
             )
        
-        elif 10 <= model_number:
+        elif 10 <= model_number <12:
             self.fc_layers = nn.Sequential(
                 nn.Linear(128 * 7 * 7, 4096),
                 nn.ReLU(True),
@@ -48,7 +48,18 @@ class CNN(nn.Module):
                 nn.Dropout(),
                 nn.Linear(4096, 100),
             )            
-           
+ 
+        elif 12 <= model_number:
+            self.fc_layers = nn.Sequential(
+                nn.Linear(256 * 3 * 3, 4096),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(4096, 4096),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(4096, 100),
+            )                      
+
         self._initialize_weights()
 
     def forward(self, x):
@@ -106,6 +117,8 @@ cfg = {
     ## nn.Linear(128 * 7 * 7, 4098) for 10 ~
     '10': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128],
     '11': [16, 16, 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],
+
+    '12': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128, 'M', 256, 256],
 }
 
 def make_CNN(model_number):
