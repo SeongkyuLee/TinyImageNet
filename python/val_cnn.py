@@ -12,10 +12,11 @@ from torchvision import transforms
 import torch
 from torch.autograd import Variable
 from dataset import TrainDataset, save_fig
-from model import make_CNN
+from vggmodel import make_vgg
+from resnetmodel import make_resnet
 import sys
 
-def validate(model_number):
+def validate(model_name, model_number):
     BATCH_SIZE = 100
     
     # load model and dataset
@@ -23,11 +24,17 @@ def validate(model_number):
     IMG_EXT = ".JPEG"
     VAL_IMG_PATH = "../data/train/images/"
     VAL_DATA = "../data/train/validation.csv"
-    MODEL_PATH = "../model/CNN"+model_number+"_model.pkl"
-    ACC_FIG_PATH = "../figure/CNN" + model_number + "_accuracy.jpg"
-    ACC_FIG_TITLE = "CNN" + model_number + " accuracy"
+    MODEL_PATH = "../model/"+ model_name + model_number + "_model.pkl"
+    ACC_FIG_PATH = "../figure/" + model_name + model_number + "_accuracy.jpg"
+    ACC_FIG_TITLE = model_name + model_number + " accuracy"
 
-    model = make_CNN(model_number)        
+    if model_name == "vgg":
+        model = make_vgg(model_number)
+    elif model_name == "resnet":
+        model = make_resnet(model_number)
+    else:
+        print('choose valid model among vgg and resnet')
+        
     print('Validate model with 10,000 images.')
     model.load_state_dict(torch.load(MODEL_PATH))
     
@@ -76,4 +83,4 @@ def validate(model_number):
     save_fig(accuracies, ACC_FIG_PATH, ACC_FIG_TITLE)
     
 if __name__ == '__main__':
-    validate(sys.argv[1])
+    validate(sys.argv[1], sys.arg[2])

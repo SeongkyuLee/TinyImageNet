@@ -11,10 +11,11 @@ from torchvision import transforms
 import torch
 from torch.autograd import Variable
 from dataset import TrainDataset, save_fig
-from model import make_CNN
+from vggmodel import make_vgg
+from resnetmodel import make_resnet
 import sys
 
-def train(model_number, is_train):
+def train(model_name, model_number, is_train):
     BATCH_SIZE = 100
     LR = 0.001
     NUM_EPOCHS = 20
@@ -22,11 +23,17 @@ def train(model_number, is_train):
     # load model and dataset
     IMG_EXT = ".JPEG"
     TRAIN_IMG_PATH = "../data/train/images/"
-    MODEL_PATH = "../model/CNN" + model_number + "_model.pkl"
-    LOSS_FIG_PATH = "../figure/CNN" + model_number + "_loss.jpg"
-    LOSS_FIG_TITLE = "CNN" + model_number + " loss"
+    MODEL_PATH = "../model/" + model_name + model_number + "_model.pkl"
+    LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_loss.jpg"
+    LOSS_FIG_TITLE = "CNN" + model_name + model_number + " loss"
  
-    model = make_CNN(model_number)
+    if model_name == "vgg":
+        model = make_vgg(model_number)
+    elif model_name == "resnet":
+        model = make_resnet(model_number)
+    else:
+        print('choose valid model among vgg and resnet')
+        
     if int(is_train):
         print('Train model only with 40,000 images.')
         TRAIN_DATA = "../data/train/train.csv"        
@@ -44,6 +51,8 @@ def train(model_number, is_train):
                                      std=[0.229, 0.224, 0.225])
     
     transformations = transforms.Compose([
+								transforms.Scale(64),
+								transforms.RandomCrop(56),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 normalize])
@@ -90,4 +99,4 @@ def train(model_number, is_train):
     save_fig(losses, LOSS_FIG_PATH, LOSS_FIG_TITLE )
     
 if __name__ == '__main__':
-    train(sys.argv[1], sys.argv[2])
+    train(sys.argv[1], sys.argv[2], sys.arg[3])

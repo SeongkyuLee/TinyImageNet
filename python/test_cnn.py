@@ -8,20 +8,21 @@ Created on Thu Jun  1 18:27:34 2017
 
 import torch
 from dataset import TestDataset
-from model import make_CNN
+from vggmodel import make_vgg
+from resnetmodel import make_resnet
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torch.autograd import Variable
 import pandas as pd
 import sys
 
-def test(model_number):
+def test(model_name, model_number):
     BATCH_SIZE = 100
     IMG_EXT = ".JPEG"
     TEST_IMG_PATH = "../data/test/images/"
     TEST_DATA = "../data/test/test_sample_submission_kaggle.csv"
-    MODEL_PATH = "../model/CNN"+model_number+"_model.pkl"
-    OUTPUT_PATH = "../result/CNN"+model_number+"_result.csv"
+    MODEL_PATH = "../model/" + model_name + model_number + "_model.pkl"
+    OUTPUT_PATH = "../result/" + model_name + model_number + "_result.csv"
     
     is_cuda = torch.cuda.is_available()
     
@@ -39,7 +40,13 @@ def test(model_number):
                              shuffle=False,
                              **kwargs)
     
-    model = make_CNN(model_number)
+    if model_name == "vgg":
+        model = make_vgg(model_number)
+    elif model_name == "resnet":
+        model = make_resnet(model_number)
+    else:
+        print('choose valid model among vgg and resnet')
+        
     model.load_state_dict(torch.load(MODEL_PATH))
     
     if is_cuda:
@@ -80,4 +87,4 @@ def test(model_number):
     df.to_csv(OUTPUT_PATH, index=False)
 
 if __name__ == '__main__':
-    test(sys.argv[1])
+    test(sys.argv[1], sys.argv[2])

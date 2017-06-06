@@ -8,10 +8,10 @@ Created on Sun Jun  4 00:20:50 2017
 import torch.nn as nn
 import math
 
-class CNN(nn.Module):
+class vgg(nn.Module):
 
     def __init__(self, model_number, cnn_layers):
-        super(CNN, self).__init__()
+        super(vgg, self).__init__()
         model_number = int(model_number)
         self.cnn_layers = cnn_layers
         
@@ -49,7 +49,7 @@ class CNN(nn.Module):
                 nn.Linear(4096, 100),
             )            
  
-        elif 12 <= model_number:
+        elif 12 <= model_number <13:
             self.fc_layers = nn.Sequential(
                 nn.Linear(256 * 3 * 3, 4096),
                 nn.ReLU(True),
@@ -58,7 +58,18 @@ class CNN(nn.Module):
                 nn.ReLU(True),
                 nn.Dropout(),
                 nn.Linear(4096, 100),
-            )                      
+            ) 
+            
+        elif 13 <= model_number:
+            self.fc_layers = nn.Sequential(
+                nn.Linear(128 * 3 * 3, 4096),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(4096, 4096),
+                nn.ReLU(True),
+                nn.Dropout(),
+                nn.Linear(4096, 100),
+            )                                        
 
         self._initialize_weights()
 
@@ -114,15 +125,17 @@ cfg = {
     '7': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 'M', 128, 128, 128],
     '8': [16, 16, 'M', 32, 32, 'M', 64, 64, 64, 64, 'M', 128, 128, 128, 128],
     '9': [16, 16, 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],  
-    ## nn.Linear(128 * 7 * 7, 4098) for 10 ~
+    # nn.Linear(128 * 7 * 7, 4098) for 10~11
     '10': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128],
     '11': [16, 16, 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],
-
+    # nn.Linear(128 * 3 * 3, 4098) for 12
     '12': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128, 'M', 256, 256],
+    '13': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],
+    '14': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128, 'M', 128, 128],    
 }
 
-def make_CNN(model_number):
+def make_vgg(model_number):
     cnn_layers = make_convolutional_layers(cfg[model_number],True)
-    model = CNN(model_number, cnn_layers)
+    model = vgg(model_number, cnn_layers)
     return model
 
