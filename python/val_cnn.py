@@ -88,4 +88,4 @@ def validate(model_name, model_number):
         wr.writerow(accuracies)
     
 if __name__ == '__main__':
-    validate(sys.argv[1], sys.arg[2])
+    validate(sys.argv[1], sys.argv[2])

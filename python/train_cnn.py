@@ -19,14 +19,14 @@ import sys
 def train(model_name, model_number, is_train, pretrained):
     BATCH_SIZE = 100
     LR = 0.001
-    NUM_EPOCHS = 10
+    NUM_EPOCHS = 20
     
     # load model and dataset
     IMG_EXT = ".JPEG"
     TRAIN_IMG_PATH = "../data/train/images/"
-    MODEL_PATH = "../model/" + model_name + model_number + "_model.pkl"
-    LOSS_PATH = "../figure/" + model_name + model_number + "_loss.csv"
-    LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_loss.jpg"
+    MODEL_PATH = "../model/" + model_name + model_number + "_1_model.pkl"
+    LOSS_PATH = "../figure/" + model_name + model_number + "_1_loss.csv"
+    LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_1_loss.jpg"
     LOSS_FIG_TITLE = "CNN" + model_name + model_number + " loss"
  
     if model_name == "vgg":
@@ -93,10 +93,10 @@ def train(model_name, model_number, is_train, pretrained):
             
             labels = labels.view(-1)
             loss = criterion(outputs, labels)
-            losses.append(loss.data[0])
             loss.backward()
             optimizer.step()
             if (i+1) % 10 == 0:
+                losses.append(loss.data[0])
                 print ('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f' 
                        %(epoch+1, NUM_EPOCHS, i+1, len(train_dataset)//BATCH_SIZE, loss.data[0]))
 
@@ -110,9 +110,4 @@ def train(model_name, model_number, is_train, pretrained):
             wr.writerow(losses)
     
 if __name__ == '__main__':
-    print(sys.argv)
-    print(sys.argv[1])
-    print(sys.argv[2])
-    print(sys.argv[3])
-    print(sys.argv[4])
     train(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
