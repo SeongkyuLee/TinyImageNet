@@ -13,17 +13,19 @@ from torch.autograd import Variable
 from dataset import TrainDataset, save_fig
 from vggmodel import make_vgg
 from resnetmodel import make_resnet
+import pandas as pd
 import sys
 
-def train(model_name, model_number, is_train):
+def train(model_name, model_number, is_train, pretrained):
     BATCH_SIZE = 100
     LR = 0.001
-    NUM_EPOCHS = 20
+    NUM_EPOCHS = 10
     
     # load model and dataset
     IMG_EXT = ".JPEG"
     TRAIN_IMG_PATH = "../data/train/images/"
     MODEL_PATH = "../model/" + model_name + model_number + "_model.pkl"
+    LOSS_PATH = "../figure/" + model_name + model_number + "_loss.csv"
     LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_loss.jpg"
     LOSS_FIG_TITLE = "CNN" + model_name + model_number + " loss"
  
@@ -33,7 +35,11 @@ def train(model_name, model_number, is_train):
         model = make_resnet(model_number)
     else:
         print('choose valid model among vgg and resnet')
-        
+
+    if int(pretrained):
+        print('load pretrained model')
+        model.load_state_dict(torch.load(MODEL_PATH))
+ 
     if int(is_train):
         print('Train model only with 40,000 images.')
         TRAIN_DATA = "../data/train/train.csv"        
@@ -96,7 +102,14 @@ def train(model_name, model_number, is_train):
 
     print('Save model')
     torch.save(model.state_dict(), MODEL_PATH)    
+    df = pd.DataFrame.from_records(losses)
+    df.to_csv(LOSS_PATH, index=False) 
     save_fig(losses, LOSS_FIG_PATH, LOSS_FIG_TITLE )
     
 if __name__ == '__main__':
-    train(sys.argv[1], sys.argv[2], sys.arg[3])
+    print(sys.argv)
+    print(sys.argv[1])
+    print(sys.argv[2])
+    print(sys.argv[3])
+    print(sys.argv[4])
+    train(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
