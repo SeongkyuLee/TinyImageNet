@@ -85,22 +85,28 @@ class Bottleneck(nn.Module):
         out = self.relu(out)
 
         return out
+    
 
 
-class ResNet(nn.Module):
+class ResNet1(nn.Module):
 
     def __init__(self, block, layers, num_classes=100):
         self.inplanes = 64
-        super(ResNet, self).__init__()
+        super(ResNet1, self).__init__()
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
                                bias=False)
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer1 = self._make_layer(block, 64, layers[0])
-        self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
+        print('maxpool', self.maxpool)
+        self.layer1 = self._make_layer(block, 64, layers[0], stride=2)
+        print('layer1', self.layer1)
+        self.layer2 = self._make_layer(block, 128, layers[1], stride=1)
+        print('layer2', self.layer2)
         self.layer3 = self._make_layer(block, 256, layers[2], stride=1)
+        print('layer3', self.layer3)
         self.layer4 = self._make_layer(block, 512, layers[3], stride=1)
+        print('layer4', self.layer4)
         self.avgpool = nn.AvgPool2d(7)
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
@@ -111,7 +117,7 @@ class ResNet(nn.Module):
             elif isinstance(m, nn.BatchNorm2d):
                 m.weight.data.fill_(1)
                 m.bias.data.zero_()
-
+                
     def _make_layer(self, block, planes, blocks, stride=1):
         downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
@@ -120,48 +126,203 @@ class ResNet(nn.Module):
                           kernel_size=1, stride=stride, bias=False),
                 nn.BatchNorm2d(planes * block.expansion),
             )
-
+    
         layers = []
         layers.append(block(self.inplanes, planes, stride, downsample))
         self.inplanes = planes * block.expansion
         for i in range(1, blocks):
             layers.append(block(self.inplanes, planes))
-
-        return nn.Sequential(*layers)
+    
+        return nn.Sequential(*layers)                
 
     def forward(self, x):
-        #print(x.size())        
+        print(x.size())        
         x = self.conv1(x)
-        #print(x.size())        
+        print(x.size())        
         x = self.bn1(x)
-        #print(x.size())        
+        print(x.size())        
         x = self.relu(x)
-        #print(x.size())        
+        print(x.size())        
         x = self.maxpool(x)
-        #print(x.size())
+        print(x.size())
         x = self.layer1(x)
-        #print(x.size())
+        print(x.size())
         x = self.layer2(x)
-        #print(x.size()) 
+        print(x.size()) 
         x = self.layer3(x)
-        #print(x.size())        
+        print(x.size())        
         x = self.layer4(x)
-        #print(x.size())
+        print(x.size())
         x = self.avgpool(x)
-        #print(x.size())        
+        print(x.size())        
         x = x.view(x.size(0), -1)
-        #print(x.size())        
+        print(x.size())        
         x = self.fc(x)
-        #print(x.size())        
+        print(x.size())        
 
         return x
 
+class ResNet2(nn.Module):
+
+    def __init__(self, block, layers, num_classes=100):
+        self.inplanes = 64
+        super(ResNet2, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
+                               bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
+        self.relu = nn.ReLU(inplace=True)
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        print('maxpool', self.maxpool)
+        self.layer1 = self._make_layer(block, 64, layers[0], stride=2)
+        print('layer1', self.layer1)
+        self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
+        print('layer2', self.layer2)
+        self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
+        print('layer3', self.layer3)
+        self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
+        print('layer4', self.layer4)
+        self.fc = nn.Linear(512 * block.expansion, num_classes)
+
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+                
+    def _make_layer(self, block, planes, blocks, stride=1):
+        downsample = None
+        if stride != 1 or self.inplanes != planes * block.expansion:
+            downsample = nn.Sequential(
+                nn.Conv2d(self.inplanes, planes * block.expansion,
+                          kernel_size=1, stride=stride, bias=False),
+                nn.BatchNorm2d(planes * block.expansion),
+            )
+    
+        layers = []
+        layers.append(block(self.inplanes, planes, stride, downsample))
+        self.inplanes = planes * block.expansion
+        for i in range(1, blocks):
+            layers.append(block(self.inplanes, planes))
+    
+        return nn.Sequential(*layers)                
+
+    def forward(self, x):
+        print(x.size())        
+        x = self.conv1(x)
+        print(x.size())        
+        x = self.bn1(x)
+        print(x.size())        
+        x = self.relu(x)
+        print(x.size())        
+        x = self.maxpool(x)
+        print(x.size())
+        x = self.layer1(x)
+        print(x.size())
+        x = self.layer2(x)
+        print(x.size()) 
+        x = self.layer3(x)
+        print(x.size())        
+        x = self.layer4(x)
+        print(x.size())        
+        x = x.view(x.size(0), -1)
+        print(x.size())        
+        x = self.fc(x)
+        print(x.size())        
+
+        return x
+    
+class ResNet3(nn.Module):
+
+    def __init__(self, block, layers, num_classes=100):
+        self.inplanes = 64
+        super(ResNet3, self).__init__()
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3,
+                               bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
+        self.relu = nn.ReLU(inplace=True)
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        print('maxpool', self.maxpool)
+        self.layer1 = self._make_layer(block, 64, layers[0], stride=2)
+        print('layer1', self.layer1)
+        self.layer2 = self._make_layer(block, 128, layers[1], stride=1)
+        print('layer2', self.layer2)
+        self.layer3 = self._make_layer(block, 256, layers[2], stride=1)
+        print('layer3', self.layer3)
+        self.layer4 = self._make_layer(block, 512, layers[3], stride=1)
+        print('layer4', self.layer4)
+        self.avgpool = nn.AvgPool2d(7)
+        self.fc1 = nn.Linear(512 * block.expansion, 512 * block.expansion)
+        self.fc2 = nn.Linear(512 * block.expansion, 512 * block.expansion)
+        self.fc3 = nn.Linear(512 * block.expansion, 100)
+
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+                
+    def _make_layer(self, block, planes, blocks, stride=1):
+        downsample = None
+        if stride != 1 or self.inplanes != planes * block.expansion:
+            downsample = nn.Sequential(
+                nn.Conv2d(self.inplanes, planes * block.expansion,
+                          kernel_size=1, stride=stride, bias=False),
+                nn.BatchNorm2d(planes * block.expansion),
+            )
+    
+        layers = []
+        layers.append(block(self.inplanes, planes, stride, downsample))
+        self.inplanes = planes * block.expansion
+        for i in range(1, blocks):
+            layers.append(block(self.inplanes, planes))
+    
+        return nn.Sequential(*layers)                
+
+    def forward(self, x):
+        print(x.size())        
+        x = self.conv1(x)
+        print(x.size())        
+        x = self.bn1(x)
+        print(x.size())        
+        x = self.relu(x)
+        print(x.size())        
+        x = self.maxpool(x)
+        print(x.size())
+        x = self.layer1(x)
+        print(x.size())
+        x = self.layer2(x)
+        print(x.size()) 
+        x = self.layer3(x)
+        print(x.size())        
+        x = self.layer4(x)
+        print(x.size())
+        x = self.avgpool(x)
+        print(x.size())        
+        x = x.view(x.size(0), -1)
+        print(x.size())        
+        x = self.fc1(x)
+        print(x.size())        
+        x = self.fc2(x)
+        print(x.size())
+        x = self.fc3(x)
+        print(x.size())        
+        return x    
+    
 cfg = {'1':[2, 2, 2, 2,],
        '2':[3, 4, 6, 3,],
-       '3':[3, 4, 23, 3],
-       '4':[3, 8, 36, 3]}
+       '3':[3, 4, 6, 3,], # 2-2-2-1로 해보(average pool 필요 없음)
+       '4':[3, 4, 6, 3], } # fc를 512 * 512, 512 * 512, 512* 100 으로 해보자.
 
 
 def make_resnet(model_number):
-    model = ResNet(BasicBlock, cfg[model_number])
+    if model_number == '1' or model_number == '2':
+        model = ResNet1(BasicBlock, cfg[model_number])
+    elif model_number == '3':
+        model = ResNet2(BasicBlock, cfg[model_number])
+    elif model_number == '4':
+        model = ResNet3(BasicBlock, cfg[model_number])        
     return model

@@ -13,7 +13,7 @@ from torch.autograd import Variable
 from dataset import TrainDataset, save_fig
 from vggmodel import make_vgg
 from resnetmodel import make_resnet
-import pandas as pd
+import csv
 import sys
 
 def train(model_name, model_number, is_train, pretrained):
@@ -102,9 +102,12 @@ def train(model_name, model_number, is_train, pretrained):
 
     print('Save model')
     torch.save(model.state_dict(), MODEL_PATH)    
-    df = pd.DataFrame.from_records(losses)
-    df.to_csv(LOSS_PATH, index=False) 
     save_fig(losses, LOSS_FIG_PATH, LOSS_FIG_TITLE )
+    
+    if not int(pretrained):
+        with open(LOSS_PATH, 'w') as myfile:
+            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+            wr.writerow(losses)
     
 if __name__ == '__main__':
     print(sys.argv)

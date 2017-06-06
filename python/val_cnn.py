@@ -14,8 +14,8 @@ from torch.autograd import Variable
 from dataset import TrainDataset, save_fig
 from vggmodel import make_vgg
 from resnetmodel import make_resnet
-import pandas as pd
 import sys
+import csv
 
 def validate(model_name, model_number):
     BATCH_SIZE = 100
@@ -26,7 +26,7 @@ def validate(model_name, model_number):
     VAL_IMG_PATH = "../data/train/images/"
     VAL_DATA = "../data/train/validation.csv"
     MODEL_PATH = "../model/"+ model_name + model_number + "_model.pkl"
-    ACC_PATH = "../figure/" + model_name + model_number + "_accuracy.csv"
+    ACC_PATH = "../figure/" + model_name + model_number + "_accuracy.csv"       
     ACC_FIG_PATH = "../figure/" + model_name + model_number + "_accuracy.jpg"
     ACC_FIG_TITLE = model_name + model_number + " accuracy"
 
@@ -82,9 +82,10 @@ def validate(model_name, model_number):
                    %(i+1, len(val_dataset)//BATCH_SIZE, 100 * correct / total))
         
     print('Test Accuracy of the model on the %d test images: %d %%' % (len(val_dataset), 100 * correct / total))
-    df = pd.DataFrame.from_records(accuracies)
-    df.to_csv(ACC_PATH, index=False)
     save_fig(accuracies, ACC_FIG_PATH, ACC_FIG_TITLE)
+    with open(ACC_PATH, 'w') as myfile:
+        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+        wr.writerow(accuracies)
     
 if __name__ == '__main__':
-    validate(sys.argv[1], sys.argv[2])
+    validate(sys.argv[1], sys.arg[2])
