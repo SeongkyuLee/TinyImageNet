@@ -26,8 +26,8 @@ def validate(model_name, model_number):
     VAL_IMG_PATH = "../data/train/images/"
     VAL_DATA = "../data/train/validation.csv"
     MODEL_PATH = "../model/"+ model_name + model_number + "_model.pkl"
-    ACC_PATH = "../figure/" + model_name + model_number + "_2_accuracy.csv"       
-    ACC_FIG_PATH = "../figure/" + model_name + model_number + "_2_accuracy.jpg"
+    ACC_PATH = "../figure/" + model_name + model_number + "_accuracy.csv"       
+    ACC_FIG_PATH = "../figure/" + model_name + model_number + "_accuracy.jpg"
     ACC_FIG_TITLE = model_name + model_number + " accuracy"
 
     if model_name == "vgg":

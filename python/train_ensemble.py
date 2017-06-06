@@ -95,10 +95,9 @@ def train(model_name, model_number, model_index):
     torch.save(model.state_dict(), MODEL_PATH)    
     save_fig(losses, LOSS_FIG_PATH, LOSS_FIG_TITLE )
     
-    if not int(pretrained):
-        with open(LOSS_PATH, 'w') as myfile:
-            wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-            wr.writerow(losses)
+    with open(LOSS_PATH, 'w') as myfile:
+        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+        wr.writerow(losses)
     
 if __name__ == '__main__':
     train(sys.argv[1], sys.argv[2], sys.argv[3])
