@@ -77,20 +77,20 @@ def test(model_name, model_number):
         outputs1 = model1(images) 
         outputs2 = model2(images)
         
-        probs1 = torch.max(outputs1)
-        probs2 = torch.max(outputs2)
-        
-        if probs1 > probs2:
-            outputs = outputs1
-        else:
-            outputs = outputs2
-            
-        for j in range(len(outputs)):
+           
+        for j in range(len(outputs1)):
             result = list()
             result.append(ids[j])
             
+            probs1 = torch.max(outputs1[j])
+            probs2 = torch.max(outputs2[j])
+	
+            if probs1.max() > probs2.max():
+                output = list(outputs1[j].data)
+            else:
+                output = list(outputs2[j].data)
             
-            output = list(outputs[j].data)
+            #output = list(outputs[j].data)
             for k in range(len(output)):            
                 result.append(2 ** output[k]) #log -> probability
                 #result.append(round(output[k],2))

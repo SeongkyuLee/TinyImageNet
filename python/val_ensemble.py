@@ -28,8 +28,8 @@ def validate(model_name, model_number):
     VAL_DATA = "../data/train/validation.csv"
     MODEL_PATH1 = "../model/"+ model_name + model_number + "_model_1.pkl"
     MODEL_PATH2 = "../model/"+ model_name + model_number + "_model_2.pkl"    
-    ACC_PATH = "../figure/" + model_name + model_number + "_accuracy.csv"       
-    ACC_FIG_PATH = "../figure/" + model_name + model_number + "_accuracy.jpg"
+    ACC_PATH = "../figure/" + model_name + model_number + "_ensemble_accuracy.csv"       
+    ACC_FIG_PATH = "../figure/" + model_name + model_number + "_ensemble_accuracy.jpg"
     ACC_FIG_TITLE = model_name + model_number + " accuracy"
 
     if model_name == "vgg":
@@ -82,17 +82,16 @@ def validate(model_name, model_number):
         
         probs1, predicted1 = torch.max(outputs1.data, 1)
         probs2, predicted2 = torch.max(outputs2.data, 1)
-        
+
         predicted = []
         for j in range(len(probs1)):
-            if probs1[j] > probs2[j]:
-                prob = probs1[j]
-                prediction = predicted1[j]
+            if probs1[j].max() > probs2[j].max():
+                prediction = predicted1[j].max()
             else:
-                prob = probs2[j]
-                prediction = predicted2[j]
+                prediction = predicted2[j].max()
             predicted.append(prediction)
-            
+
+        predicted = torch.LongTensor(predicted).cuda()
         total += labels.size(0)
         correct += (predicted == labels).sum()
         accuracies.append(100 * correct / float(total))
@@ -108,4 +107,4 @@ def validate(model_name, model_number):
         wr.writerow(accuracies)
     
 if __name__ == '__main__':
-    validate(sys.argv[1], sys.arg[2])
+    validate(sys.argv[1], sys.argv[2])

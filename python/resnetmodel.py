@@ -7,6 +7,7 @@ Created on Mon Jun  5 16:45:05 2017
 """
 
 import torch.nn as nn
+import torch.nn.functional as F
 import math
 
 
@@ -142,6 +143,7 @@ class ResNet1(nn.Module):
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         x = self.fc(x)
+        x = F.log_softmax(x)
 
         return x
 
@@ -197,6 +199,7 @@ class ResNet2(nn.Module):
         x = self.layer4(x)
         x = x.view(x.size(0), -1)
         x = self.fc(x)
+        x = F.log_softmax(x)
 
         return x
     
@@ -258,6 +261,7 @@ class ResNet3(nn.Module):
         x = self.fc1(x)
         x = self.fc2(x)
         x = self.fc3(x)
+        x = F.log_softmax(x)
         return x    
     
 cfg = {'1':[2, 2, 2, 2,],
