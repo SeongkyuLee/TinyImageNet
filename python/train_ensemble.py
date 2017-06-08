@@ -7,7 +7,6 @@ Created on Mon May 15 15:33:46 2017
 """
 from torch.utils.data import DataLoader
 from torchvision import transforms
-
 import torch
 from torch.autograd import Variable
 from dataset import TrainDataset, save_fig
@@ -15,6 +14,17 @@ from vggmodel import make_vgg
 from resnetmodel import make_resnet
 import csv
 import sys
+def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=7):
+    """Decay learning rate by a factor of 0.1 every lr_decay_epoch epochs."""
+    lr = init_lr * (0.1**(epoch // lr_decay_epoch))
+
+    if epoch % lr_decay_epoch == 0:
+        print('LR is set to {}'.format(lr))
+
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
+
+    return optimizer
 
 def train(model_name, model_number, model_index):
     BATCH_SIZE = 100
@@ -47,12 +57,20 @@ def train(model_name, model_number, model_index):
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
     
-    transformations = transforms.Compose([
-								transforms.Scale(64),
-								transforms.RandomCrop(56),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                normalize])
+    if model_name == 'resnet' and (model_number == '18' or model_number == '34'):
+        transformations = transforms.Compose([
+    								transforms.Scale(256),
+    								transforms.RandomCrop(224),
+                                    transforms.RandomHorizontalFlip(),
+                                    transforms.ToTensor(),
+                                    normalize])
+    else:
+        transformations = transforms.Compose([
+    								transforms.Scale(64),
+    								transforms.RandomCrop(56),
+                                    transforms.RandomHorizontalFlip(),
+                                    transforms.ToTensor(),
+                                    normalize])        
     
     kwargs = {'num_workers':1, 'pin_memory':True} if is_cuda else {}
     train_dataset = TrainDataset(TRAIN_DATA, TRAIN_IMG_PATH, IMG_EXT, transformations)
@@ -63,7 +81,7 @@ def train(model_name, model_number, model_index):
 
     # Loss and Optimizer
     criterion = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=LR)
+    optimizer = torch.optim.SGD(model.parameters(), lr=LR, momentum=0.9)
 
     # Train the Model    
     print('Start training')
@@ -79,6 +97,7 @@ def train(model_name, model_number, model_index):
             labels = Variable(labels)
             
             # Forward + Backward + Optimize
+            optimizer = exp_lr_scheduler(optimizer, epoch, LR, 5)
             optimizer.zero_grad()
             outputs = model(images)
             

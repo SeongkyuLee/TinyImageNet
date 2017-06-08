@@ -48,9 +48,16 @@ def validate(model_name, model_number):
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
     
-    transformations = transforms.Compose([
-                transforms.ToTensor(),
-                normalize])
+    if model_name == 'resnet' and (model_number == '18' or model_number == '34'):
+        transformations = transforms.Compose([
+    								transforms.Scale(224),
+                                    transforms.ToTensor(),
+                                    normalize])
+    else:
+        transformations = transforms.Compose([
+                                    transforms.ToTensor(),
+                                    normalize])
+    
     kwargs = {'num_workers':1, 'pin_memory':True} if is_cuda else {}
 
     val_dataset = TrainDataset(VAL_DATA, VAL_IMG_PATH, IMG_EXT, transformations)
