@@ -27,15 +27,17 @@ def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=4):
 
     return optimizer
 
-def train(model_name, model_number, model_index, validation):
+
+def train(model_name, model_number, model_index, is_validation):
+    is_validation = int(is_validation)
     BATCH_SIZE = 100
     LR = 0.001
-    NUM_EPOCHS = 20
-    IS_VALIDATION = int(validation)
+    NUM_EPOCHS = 10
     
     # load model and dataset
     IMG_EXT = ".JPEG"
     TRAIN_IMG_PATH = "../data/train/images/"
+
     if IS_VALIDATION:    
         MODEL_PATH = "../model/" + model_name + model_number + "_val_" + model_index + ".pkl"
         LOSS_PATH = "../figure/" + model_name + model_number + "_val_loss_" + model_index + ".csv"
@@ -49,7 +51,6 @@ def train(model_name, model_number, model_index, validation):
         LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_test_loss_" + model_index + ".jpg"
         LOSS_FIG_TITLE = "CNN" + model_name + model_number + " test loss"
         TRAIN_DATA = "../data/train/train_labels.csv"          
-
  
     if model_name == "vgg":
         model = make_vgg(model_number)
@@ -58,12 +59,17 @@ def train(model_name, model_number, model_index, validation):
     else:
         print('choose valid model among vgg and resnet')
 
-    print('Train model with 50,000 images.')
-      
+    if(is_validation): 
+        print('Train model with 45,000 images.')
+        TRAIN_DATA = "../data/train/train.csv"
+    else:
+        print('Train model with 50,000 images.')
+        TRAIN_DATA = "../data/train/train_labels.csv"        
    
     # check whether use cuda or not
     is_cuda = torch.cuda.is_available()
     if is_cuda:
+        print('I use cuda')
         model.cuda()
     
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -110,7 +116,6 @@ def train(model_name, model_number, model_index, validation):
             labels = Variable(labels)
             
             # Forward + Backward + Optimize
-
             optimizer.zero_grad()
             outputs = model(images)
             
@@ -132,4 +137,5 @@ def train(model_name, model_number, model_index, validation):
         wr.writerow(losses)
     
 if __name__ == '__main__':
-    train(sys.argv[1], sys.argv[2], sys.argv[3], sys.arg[4])
+    train(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+

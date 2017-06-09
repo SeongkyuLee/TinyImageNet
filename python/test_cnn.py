@@ -21,7 +21,7 @@ def test(model_name, model_number):
     IMG_EXT = ".JPEG"
     TEST_IMG_PATH = "../data/test/images/"
     TEST_DATA = "../data/test/test_sample_submission_kaggle.csv"
-    MODEL_PATH = "../model/" + model_name + model_number + "_model.pkl"
+    MODEL_PATH = "../model/" + model_name + model_number + "_test_1.pkl"
     OUTPUT_PATH = "../result/" + model_name + model_number + "_result.csv"
     
     is_cuda = torch.cuda.is_available()
@@ -29,6 +29,7 @@ def test(model_name, model_number):
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
     transformations = transforms.Compose([
+                transforms.Scale(224),
                 transforms.ToTensor(),
                 normalize])
     

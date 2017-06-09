@@ -16,13 +16,14 @@ from torch.autograd import Variable
 import pandas as pd
 import sys
 
-def test(model_name, model_number):
+def test(model_name, model_number, is_ensemble):
+    is_ensemble = int(is_ensemble)
     BATCH_SIZE = 100
     IMG_EXT = ".JPEG"
     TEST_IMG_PATH = "../data/test/images/"
     TEST_DATA = "../data/test/test_sample_submission_kaggle.csv"
-    MODEL_PATH1 = "../model/" + model_name + model_number + "_model_1.pkl"
-    MODEL_PATH2 = "../model/" + model_name + model_number + "_model_2.pkl"    
+    MODEL_PATH1 = "../model/" + model_name + model_number + "_test_1.pkl"
+    MODEL_PATH2 = "../model/" + model_name + model_number + "_test_2.pkl"    
     OUTPUT_PATH = "../result/" + model_name + model_number + "_result.csv"
     
     is_cuda = torch.cuda.is_available()
@@ -56,17 +57,22 @@ def test(model_name, model_number):
         model2 = make_resnet(model_number)        
     else:
         print('choose valid model among vgg and resnet')
-        
-    model1.load_state_dict(torch.load(MODEL_PATH1))
-    model2.load_state_dict(torch.load(MODEL_PATH2))    
-    
-    if is_cuda:
-        model1.cuda()
-        model2.cuda()
 
-    model1.eval()
-    model2.eval()    
-    
+    if is_ensemble:        
+        model1.load_state_dict(torch.load(MODEL_PATH1))
+        model2.load_state_dict(torch.load(MODEL_PATH2))    
+        if is_cuda:
+            model1.cuda()
+            model2.cuda()
+        model1.eval()
+        model2.eval()
+
+    else:
+        model1.load_state_dict(torch.load(MODEL_PATH1))
+        if is_cuda:
+            model1.cuda()    
+        model1.eval()
+   
     header = list()
     header.append('id')
     class_names = ['class_'+str(x).zfill(3) for x in range(100)]
@@ -82,7 +88,8 @@ def test(model_name, model_number):
             images = images.cuda()
         images = Variable(images)
         outputs1 = model1(images) 
-        outputs2 = model2(images)
+        if is_ensemble:
+            outputs2 = model2(images)
         
            
         for j in range(len(outputs1)):
@@ -90,12 +97,15 @@ def test(model_name, model_number):
             result.append(ids[j])
             
             probs1 = torch.max(outputs1[j])
-            probs2 = torch.max(outputs2[j])
+            if is_ensemble:
+                probs2 = torch.max(outputs2[j])
 	
-            if probs1.max() > probs2.max():
-                output = list(outputs1[j].data)
+                if probs1.max() > probs2.max():
+                    output = list(outputs1[j].data)
+                else:
+                    output = list(outputs2[j].data)
             else:
-                output = list(outputs2[j].data)
+                output = outputs1[j].data
             
             #output = list(outputs[j].data)
             for k in range(len(output)):            
@@ -111,4 +121,4 @@ def test(model_name, model_number):
     df.to_csv(OUTPUT_PATH, index=False)
 
 if __name__ == '__main__':
-    test(sys.argv[1], sys.argv[2])
+    test(sys.argv[1], sys.argv[2], sys.argv[3])
