@@ -22,10 +22,14 @@ def test(model_name, model_number, is_ensemble):
     IMG_EXT = ".JPEG"
     TEST_IMG_PATH = "../data/test/images/"
     TEST_DATA = "../data/test/test_sample_submission_kaggle.csv"
-    MODEL_PATH1 = "../model/" + model_name + model_number + "_test_1.pkl"
-    MODEL_PATH2 = "../model/" + model_name + model_number + "_test_2.pkl"    
-    OUTPUT_PATH = "../result/" + model_name + model_number + "_result.csv"
-    
+    MODEL_PATH1 = "../model/" + model_name + model_number + "_test_2.pkl"
+    MODEL_PATH2 = "../model/" + model_name + model_number + "_test_2.pkl"   
+   
+    if is_ensemble: 
+        OUTPUT_PATH = "../result/" + model_name + model_number + "_ensemble_result.csv"
+    else: 
+        OUTPUT_PATH = "../result/" + model_name + model_number + "_result.csv"
+
     is_cuda = torch.cuda.is_available()
     
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
