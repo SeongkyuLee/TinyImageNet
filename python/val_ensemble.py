@@ -19,15 +19,15 @@ import sys
 import csv
 
 def validate(model_name, model_number):
-    BATCH_SIZE = 100
+    BATCH_SIZE = 10
     
     # load model and dataset
 
     IMG_EXT = ".JPEG"
     VAL_IMG_PATH = "../data/train/images/"
     VAL_DATA = "../data/train/validation.csv"
-    MODEL_PATH1 = "../model/"+ model_name + model_number + "_model_1.pkl"
-    MODEL_PATH2 = "../model/"+ model_name + model_number + "_model_2.pkl"   
+    MODEL_PATH1 = "../model/"+ model_name + model_number + "_val_1.pkl"
+    MODEL_PATH2 = "../model/"+ model_name + model_number + "_val_2.pkl"   
     ACC_PATH1 = "../figure/" + model_name + model_number + "_accuracy_1.csv"       
     ACC_FIG_PATH1 = "../figure/" + model_name + model_number + "_accuracy_1.jpg"
     ACC_FIG_TITLE1 = model_name + model_number + "model 1 accuracy"   
