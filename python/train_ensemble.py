@@ -29,7 +29,7 @@ def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=7):
 def train(model_name, model_number, model_index):
     BATCH_SIZE = 100
     LR = 0.001
-    NUM_EPOCHS = 20
+    NUM_EPOCHS = 10
     
     # load model and dataset
     IMG_EXT = ".JPEG"
@@ -47,7 +47,8 @@ def train(model_name, model_number, model_index):
         print('choose valid model among vgg and resnet')
 
     print('Train model with 50,000 images.')
-    TRAIN_DATA = "../data/train/train_labels.csv"        
+    #TRAIN_DATA = "../data/train/train_labels.csv"        
+    TRAIN_DATA = "../data/train/train.csv"
    
     # check whether use cuda or not
     is_cuda = torch.cuda.is_available()
@@ -88,6 +89,7 @@ def train(model_name, model_number, model_index):
     model.train()
     losses = []
     for epoch in range(NUM_EPOCHS):
+        optimizer = exp_lr_scheduler(optimizer, epoch, LR, 5)
         for i, (images, labels) in enumerate(train_loader):
             if is_cuda:
                 images = images.cuda()
@@ -97,7 +99,6 @@ def train(model_name, model_number, model_index):
             labels = Variable(labels)
             
             # Forward + Backward + Optimize
-            optimizer = exp_lr_scheduler(optimizer, epoch, LR, 5)
             optimizer.zero_grad()
             outputs = model(images)
             

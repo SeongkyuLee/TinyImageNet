@@ -25,7 +25,7 @@ def validate(model_name, model_number):
     IMG_EXT = ".JPEG"
     VAL_IMG_PATH = "../data/train/images/"
     VAL_DATA = "../data/train/validation.csv"
-    MODEL_PATH = "../model/"+ model_name + model_number + "_model.pkl"
+    MODEL_PATH = "../model/"+ model_name + model_number + "_model_2.pkl"
     ACC_PATH = "../figure/" + model_name + model_number + "_accuracy.csv"       
     ACC_FIG_PATH = "../figure/" + model_name + model_number + "_accuracy.jpg"
     ACC_FIG_TITLE = model_name + model_number + " accuracy"

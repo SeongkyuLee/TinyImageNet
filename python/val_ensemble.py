@@ -26,8 +26,8 @@ def validate(model_name, model_number):
     IMG_EXT = ".JPEG"
     VAL_IMG_PATH = "../data/train/images/"
     VAL_DATA = "../data/train/validation.csv"
-    MODEL_PATH1 = "../model/"+ model_name + model_number + "_test_1.pkl"
-    MODEL_PATH2 = "../model/"+ model_name + model_number + "_test_2.pkl"   
+    MODEL_PATH1 = "../model/"+ model_name + model_number + "_model_1.pkl"
+    MODEL_PATH2 = "../model/"+ model_name + model_number + "_model_2.pkl"   
     ACC_PATH1 = "../figure/" + model_name + model_number + "_accuracy_1.csv"       
     ACC_FIG_PATH1 = "../figure/" + model_name + model_number + "_accuracy_1.jpg"
     ACC_FIG_TITLE1 = model_name + model_number + "model 1 accuracy"   
@@ -61,6 +61,7 @@ def validate(model_name, model_number):
                                      std=[0.229, 0.224, 0.225])
     
     transformations = transforms.Compose([
+                transforms.Scale(224),
                 transforms.ToTensor(),
                 normalize])
     kwargs = {'num_workers':1, 'pin_memory':True} if is_cuda else {}
