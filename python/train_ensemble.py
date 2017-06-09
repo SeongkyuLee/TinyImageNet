@@ -14,7 +14,8 @@ from vggmodel import make_vgg
 from resnetmodel import make_resnet
 import csv
 import sys
-def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=7):
+
+def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=4):
     """Decay learning rate by a factor of 0.1 every lr_decay_epoch epochs."""
     lr = init_lr * (0.1**(epoch // lr_decay_epoch))
 
@@ -26,18 +27,29 @@ def exp_lr_scheduler(optimizer, epoch, init_lr=0.001, lr_decay_epoch=7):
 
     return optimizer
 
-def train(model_name, model_number, model_index):
+def train(model_name, model_number, model_index, validation):
     BATCH_SIZE = 100
     LR = 0.001
     NUM_EPOCHS = 20
+    IS_VALIDATION = int(validation)
     
     # load model and dataset
     IMG_EXT = ".JPEG"
     TRAIN_IMG_PATH = "../data/train/images/"
-    MODEL_PATH = "../model/" + model_name + model_number + "_model_" + model_index + ".pkl"
-    LOSS_PATH = "../figure/" + model_name + model_number + "_loss_" + model_index + ".csv"
-    LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_loss_" + model_index + ".jpg"
-    LOSS_FIG_TITLE = "CNN" + model_name + model_number + " loss"
+    if IS_VALIDATION:    
+        MODEL_PATH = "../model/" + model_name + model_number + "_val_" + model_index + ".pkl"
+        LOSS_PATH = "../figure/" + model_name + model_number + "_val_loss_" + model_index + ".csv"
+        LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_val_loss_" + model_index + ".jpg"
+        LOSS_FIG_TITLE = "CNN" + model_name + model_number + " val loss"
+        TRAIN_DATA = "../data/train/train.csv" 
+        
+    else:
+        MODEL_PATH = "../model/" + model_name + model_number + "_test_" + model_index + ".pkl"
+        LOSS_PATH = "../figure/" + model_name + model_number + "_test_loss_" + model_index + ".csv"
+        LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_test_loss_" + model_index + ".jpg"
+        LOSS_FIG_TITLE = "CNN" + model_name + model_number + " test loss"
+        TRAIN_DATA = "../data/train/train_labels.csv"          
+
  
     if model_name == "vgg":
         model = make_vgg(model_number)
@@ -47,7 +59,7 @@ def train(model_name, model_number, model_index):
         print('choose valid model among vgg and resnet')
 
     print('Train model with 50,000 images.')
-    TRAIN_DATA = "../data/train/train_labels.csv"        
+      
    
     # check whether use cuda or not
     is_cuda = torch.cuda.is_available()
@@ -88,6 +100,7 @@ def train(model_name, model_number, model_index):
     model.train()
     losses = []
     for epoch in range(NUM_EPOCHS):
+        optimizer = exp_lr_scheduler(optimizer, epoch, LR, 4)        
         for i, (images, labels) in enumerate(train_loader):
             if is_cuda:
                 images = images.cuda()
@@ -97,7 +110,7 @@ def train(model_name, model_number, model_index):
             labels = Variable(labels)
             
             # Forward + Backward + Optimize
-            optimizer = exp_lr_scheduler(optimizer, epoch, LR, 5)
+
             optimizer.zero_grad()
             outputs = model(images)
             
@@ -119,4 +132,4 @@ def train(model_name, model_number, model_index):
         wr.writerow(losses)
     
 if __name__ == '__main__':
-    train(sys.argv[1], sys.argv[2], sys.argv[3])
+    train(sys.argv[1], sys.argv[2], sys.argv[3], sys.arg[4])
