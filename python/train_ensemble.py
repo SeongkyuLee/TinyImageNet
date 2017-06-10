@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon May 15 15:33:46 2017
-
+modify http://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
 @author: Q
 """
 from torch.utils.data import DataLoader
@@ -34,24 +34,29 @@ def train(model_name, model_number, model_index, is_validation):
     LR = 0.001
     NUM_EPOCHS = 20
     
-    # load model and dataset
+    # dataset path
     IMG_EXT = ".JPEG"
     TRAIN_IMG_PATH = "../data/train/images/"
 
-    if IS_VALIDATION:    
+    # train 40,000 dataset for validation
+    if is_validation:    
         MODEL_PATH = "../model/" + model_name + model_number + "_val_" + model_index + ".pkl"
         LOSS_PATH = "../figure/" + model_name + model_number + "_val_loss_" + model_index + ".csv"
         LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_val_loss_" + model_index + ".jpg"
         LOSS_FIG_TITLE = "CNN" + model_name + model_number + " val loss"
         TRAIN_DATA = "../data/train/train.csv" 
+        print('Train model with 40,000 images.')
         
+    # train 50,000 dataset for test
     else:
         MODEL_PATH = "../model/" + model_name + model_number + "_test_" + model_index + ".pkl"
         LOSS_PATH = "../figure/" + model_name + model_number + "_test_loss_" + model_index + ".csv"
         LOSS_FIG_PATH = "../figure/" + model_name + model_number + "_test_loss_" + model_index + ".jpg"
         LOSS_FIG_TITLE = "CNN" + model_name + model_number + " test loss"
+        print('Train model with 50,000 images.')
         TRAIN_DATA = "../data/train/train_labels.csv"          
  
+    # choose model architecture
     if model_name == "vgg":
         model = make_vgg(model_number)
     elif model_name == "resnet":
@@ -59,19 +64,14 @@ def train(model_name, model_number, model_index, is_validation):
     else:
         print('choose valid model among vgg and resnet')
 
-    if(is_validation): 
-        print('Train model with 45,000 images.')
-        TRAIN_DATA = "../data/train/train.csv"
-    else:
-        print('Train model with 50,000 images.')
-        TRAIN_DATA = "../data/train/train_labels.csv"        
    
     # check whether use cuda or not
     is_cuda = torch.cuda.is_available()
     if is_cuda:
-        print('I use cuda')
+        print('Learning with cuda')
         model.cuda()
     
+    # data augmentation
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
     
@@ -97,11 +97,11 @@ def train(model_name, model_number, model_index, is_validation):
                               shuffle=True,
                               **kwargs)
 
-    # Loss and Optimizer
+    # loss and optimizer
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=LR, momentum=0.9)
 
-    # Train the Model    
+    # train the model    
     print('Start training')
     model.train()
     losses = []
@@ -129,6 +129,8 @@ def train(model_name, model_number, model_index, is_validation):
                        %(epoch+1, NUM_EPOCHS, i+1, len(train_dataset)//BATCH_SIZE, loss.data[0]))
 
     print('Save model')
+    
+    # save model and loss data
     torch.save(model.state_dict(), MODEL_PATH)    
     save_fig(losses, LOSS_FIG_PATH, LOSS_FIG_TITLE )
     
@@ -137,5 +139,8 @@ def train(model_name, model_number, model_index, is_validation):
         wr.writerow(losses)
     
 if __name__ == '__main__':
-    train(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    if len(sys.argv) != 5:
+        print('Usage : python3 train_ensemble.py model_name model_number, model_index, is_validation')
+    else:
+        train(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 

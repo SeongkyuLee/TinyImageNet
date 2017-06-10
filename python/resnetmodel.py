@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jun  5 16:45:05 2017
-
+modify https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py
 @author: Q
 """
 
@@ -226,8 +226,8 @@ class ResNet3(nn.Module):
     
 cfg = {'1':[2, 2, 2, 2,],
        '2':[3, 4, 6, 3,],
-       '3':[3, 4, 6, 3,], # 2-2-2-1로 해보(average pool 필요 없음)
-       '4':[3, 4, 6, 3], } # fc를 512 * 512, 512 * 512, 512* 100 으로 해보자.
+       '3':[3, 4, 6, 3,],
+       '4':[3, 4, 6, 3], } 
 
 
 def make_resnet(model_number):

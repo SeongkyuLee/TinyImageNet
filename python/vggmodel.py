@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Jun  4 00:20:50 2017
-
+modift https://github.com/pytorch/vision/blob/master/torchvision/models/vgg.py
 @author: Q
 """
 import torch.nn as nn
@@ -110,10 +110,6 @@ def make_convolutional_layers(cfg, batch_norm=False):
     return nn.Sequential(*layers)
 
 cfg = {
-    'A': [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
-    'B': [64, 64, 'M', 128, 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
-    'D': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
-    'E': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
     # nn.Linear(128 * 3 * 3, 1024) for 1~4
     '1': [16, 'M', 32, 'M', 64, 64, 'M', 128, 128, 'M'],
     '2': [16, 16, 'M', 32, 32, 'M', 64, 64, 'M', 128, 128, 'M'],
