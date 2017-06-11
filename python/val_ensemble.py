@@ -123,11 +123,8 @@ def validate(model_name, model_number, is_ensemble):
                 predicted.append(prediction)
             predicted = torch.LongTensor(predicted).cuda()
             
-        else:
-            predicted = outputs1
-            
         total += labels.size(0)
-        correct += (predicted == labels).sum()
+        correct += (predicted1 == labels).sum()
         accuracies.append(100 * correct / float(total))        
         
         if is_ensemble:

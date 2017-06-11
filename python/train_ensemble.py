@@ -32,7 +32,7 @@ def train(model_name, model_number, model_index, is_validation):
     is_validation = int(is_validation)
     BATCH_SIZE = 100
     LR = 0.001
-    NUM_EPOCHS = 20
+    NUM_EPOCHS = 1
     
     # dataset path
     IMG_EXT = ".JPEG"
