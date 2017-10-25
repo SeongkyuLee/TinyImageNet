@@ -29,7 +29,7 @@ UCSB에서 수강한 고급 컴퓨터 비전 수업의 최종 프로젝트입니
 1) VGG Net vs Res Net
 ResNet이 VGGNet보다 약 7% 더 높은 accuracy를 보여줍니다. 둘 다 pre-trained 되지 않은 상태에서 VGGNet은 38% 정도의 accuracy에 수렴하고, Res Net은 45% 정도의 accuracy에 수렴합니다. 
 
-<Figure 1> VGG Net 19 (non-pretrained, non-ensemble)
+\<Figure 1\> VGG Net 19 (non-pretrained, non-ensemble)
 
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/VGG19_no_pre_no_ens.jpg"/>
 
