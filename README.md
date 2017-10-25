@@ -42,22 +42,22 @@ Pre-trained된 ResNet이 약 35% 더 높은 accuracy를 보여줍니다. pre-tra
 
 \<Figure 3\> Non-pretrained Res Net 34 (non-pretrained, non-ensemble)
 
-<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_no_pre_no_ens.jpg"/>
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_no_pre_no_ens.jpg" width="400" height="300"/>
 
 \<Figure 4\> Pretrained Res Net 34 (pretrained, non-ensemble)
 
-<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg"/>
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg" width="400" height="300"/>
 
 3) ensemble model vs non-ensemble model
 ensemble을 사용한 모델은 accuracy에 큰 차이를 보여주지 않습니다. ensemble을 사용한 모델과 사용하지 않은 모델 모두 79% 정도의 accuracy를 보여줍니다. 
 
 \<Figure 5\> Non-ensemble Res Net 34 (pretrained, non-ensemble)
 
-<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg"/>
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg" width="400" height="300"/>
 
 \<Figure 6\> Ensemble Res Net 34 (pretrained, ensemble)
 
-<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_ens.jpg"/>
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_ens.jpg" width="400" height="300"/>
 
 # 모델 선택 결과
 non-ensemble pre-trained ResNet 34 Layer를 선택 했습니다. ensemble 모델을 사용하기 위해서는 2개의 모델을 만들어야 하므로, 기존 학습 시간의 2배가 된다는 점을 생각하면, 제한된 프로젝트 시간에서는 효율적이지 않은 방식이라 판단이 되어서 non-ensemble model를 선택 했습니다.
