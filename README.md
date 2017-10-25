@@ -32,14 +32,16 @@ ResNet이 VGGNet보다 약 7% 더 높은 accuracy를 보여줍니다. 둘 다 pr
 VGG Net 19 (non-pretrained, non-ensemble)
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/VGG19_no_pre_no_ens.jpg"/>
 
+
 Res Net 34 (non-pretrained, non-ensemble)
-<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_no_pre_no_ens.jpg?"/>
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_no_pre_no_ens.jpg"/>
 
 2) pre-trained Res Net vs non-pre-trained Res Net
 Pre-trained된 ResNet이 약 35% 더 높은 accuracy를 보여줍니다. pre-trained된 모델은 80%의 accuracy를 보여주고, non-pre-trained된 모델은 45% 정도의 accuracy를 보여줍니다. 
 
 Non-pretrained Res Net 34 (non-pretrained, non-ensemble)
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg"/>
+
 
 Pretrained Res Net 34 (pretrained, non-ensemble)
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_no_pre_no_ens.jpg"/>
@@ -49,6 +51,7 @@ ensemble을 사용한 모델이 약 2% 정도 더 높은 accuracy를 보여줍�
 
 Non-ensemble Res Net 34 (pretrained, non-ensemble)
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg"/>
+
 
 Ensemble Res Net 34 (pretrained, ensemble)
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_ens.jpg"/>
