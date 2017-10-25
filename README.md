@@ -12,7 +12,7 @@ UCSB에서 수강한 고급 컴퓨터 비전 수업의 최종 프로젝트입니
 
 알고리즘 : CNN
 
-아키텍처 : VGG Net 16 Layer, Res Net 34 Layer
+아키텍처 : VGG Net 19 Layer, Res Net 34 Layer
 
 # 과정
 1) 라벨이 붙은 50,000개의 이미지를 40,000개의 training 데이터와 10,000개의 validation 데이터로 나눕니다.
@@ -29,11 +29,32 @@ UCSB에서 수강한 고급 컴퓨터 비전 수업의 최종 프로젝트입니
 1) VGG Net vs Res Net
 ResNet이 VGGNet보다 약 7% 더 높은 accuracy를 보여줍니다. 둘 다 pre-trained 되지 않은 상태에서 VGGNet은 38% 정도의 accuracy에 수렴하고, Res Net은 45% 정도의 accuracy에 수렴합니다. 
 
+<Figure 1> VGG Net 19 (non-pretrained, non-ensemble)
+
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/VGG19_no_pre_no_ens.jpg"/>
+
+<Figure 2> Res Net 34 (non-pretrained, non-ensemble)
+
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_no_pre_no_ens.jpg"/>
+
 2) pre-trained Res Net vs non-pre-trained Res Net
 Pre-trained된 ResNet이 약 35% 더 높은 accuracy를 보여줍니다. pre-trained된 모델은 80%의 accuracy를 보여주고, non-pre-trained된 모델은 45% 정도의 accuracy를 보여줍니다. 
 
+<Figure 3> Non-pretrained Res Net 34 (non-pretrained, non-ensemble)
+
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg"/>
+
+<Figure 4> Pretrained Res Net 34 (pretrained, non-ensemble)
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_no_pre_no_ens.jpg"/>
+
 3) ensemble model vs non-ensemble model
 ensemble을 사용한 모델이 약 2% 정도 더 높은 accuracy를 보여줍니다. ensemble을 사용한 모델은 47% 정도의 accuracy를 보여주고, ensemble을 사용하지 않은 모델은 45% 정도의 accuracy를 보여줍니다. 
+
+<Figure 5> Non-ensemble Res Net 34 (pretrained, non-ensemble)
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg"/>
+
+<Figure 6> Ensemble Res Net 34 (pretrained, ensemble)
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_ens.jpg"/>
 
 # 모델 선택 결과
 non-ensemble pre-trained ResNet 34 Layer를 선택 했습니다. ensemble 모델을 사용하기 위해서는 2개의 모델을 만들어야 하므로, 기존 학습 시간의 2배가 된다는 점을 생각하면, 제한된 프로젝트 시간에서는 효율적이지 않은 방식이라 판단이 되어서 non-ensemble model를 선택 했습니다.
