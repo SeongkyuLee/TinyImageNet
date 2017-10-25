@@ -5,9 +5,13 @@ UCSB에서 수강한 고급 컴퓨터 비전 수업의 최종 프로젝트입니
 
 # 환경
 운영 체제 : Ubuntu 16.04 LTS
+
 가상 환경 : Microsoft Azure 
+
 라이브러리 : Pytorch
+
 알고리즘 : CNN
+
 아키텍처 : VGG Net 16 Layer, Res Net 34 Layer
 
 # 과정
