@@ -33,29 +33,29 @@ ResNet이 VGGNet보다 약 7% 더 높은 accuracy를 보여줍니다. 둘 다 pr
 
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/VGG19_no_pre_no_ens.jpg"/>
 
-<Figure 2> Res Net 34 (non-pretrained, non-ensemble)
+\<Figure 2\> Res Net 34 (non-pretrained, non-ensemble)
 
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_no_pre_no_ens.jpg"/>
 
 2) pre-trained Res Net vs non-pre-trained Res Net
 Pre-trained된 ResNet이 약 35% 더 높은 accuracy를 보여줍니다. pre-trained된 모델은 79%의 accuracy를 보여주고, non-pre-trained된 모델은 45% 정도의 accuracy를 보여줍니다. 
 
-<Figure 3> Non-pretrained Res Net 34 (non-pretrained, non-ensemble)
+\<Figure 3\> Non-pretrained Res Net 34 (non-pretrained, non-ensemble)
 
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_no_pre_no_ens.jpg"/>
 
-<Figure 4> Pretrained Res Net 34 (pretrained, non-ensemble)
+\<Figure 4\> Pretrained Res Net 34 (pretrained, non-ensemble)
 
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg"/>
 
 3) ensemble model vs non-ensemble model
 ensemble을 사용한 모델은 accuracy에 큰 차이를 보여주지 않습니다. ensemble을 사용한 모델과 사용하지 않은 모델 모두 79% 정도의 accuracy를 보여줍니다. 
 
-<Figure 5> Non-ensemble Res Net 34 (pretrained, non-ensemble)
+\<Figure 5\> Non-ensemble Res Net 34 (pretrained, non-ensemble)
 
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_no_ens.jpg"/>
 
-<Figure 6> Ensemble Res Net 34 (pretrained, ensemble)
+\<Figure 6\> Ensemble Res Net 34 (pretrained, ensemble)
 
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Res34_pre_ens.jpg"/>
 
@@ -63,6 +63,6 @@ ensemble을 사용한 모델은 accuracy에 큰 차이를 보여주지 않습니
 non-ensemble pre-trained ResNet 34 Layer를 선택 했습니다. ensemble 모델을 사용하기 위해서는 2개의 모델을 만들어야 하므로, 기존 학습 시간의 2배가 된다는 점을 생각하면, 제한된 프로젝트 시간에서는 효율적이지 않은 방식이라 판단이 되어서 non-ensemble model를 선택 했습니다.
 최종적으로 라벨을 붙인 testing data는 Multiclass Loss 약 1.01 값을 얻을 수 있었습니다.
 
-<Figure 7> Kaggle 결과
+\<Figure 7\> Kaggle 결과
 <img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/Kaggle_result.png"/>
 
