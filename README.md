@@ -31,7 +31,7 @@ ResNet이 VGGNet보다 약 7% 더 높은 accuracy를 보여줍니다. 둘 다 pr
 
 \<Figure 1\> VGG Net 19 (non-pretrained, non-ensemble)
 
-<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/VGG19_no_pre_no_ens.jpg"/>
+<img src="https://github.com/SeongkyuLee/TinyImageNet/blob/master/figure/VGG19_no_pre_no_ens.jpg" width=500 height=400/>
 
 \<Figure 2\> Res Net 34 (non-pretrained, non-ensemble)
 
